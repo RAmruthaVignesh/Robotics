@@ -1,0 +1,277 @@
+\documentclass[11pt]{article}
+    \usepackage{amsmath,amssymb,amsthm}
+    \usepackage{graphicx}
+    \usepackage[margin=1in]{geometry}
+    \usepackage{fancyhdr}
+    \usepackage{subcaption} \usepackage{algorithmic}
+    \usepackage[makeroom]{cancel}
+    \usepackage{algorithm}
+    \usepackage{float}
+    \usepackage{ragged2e}
+    \usepackage{color}
+    % \setlength{\parindent}{0pt}
+    \setlength\parindent{0pt}
+    \setlength{\parskip}{5pt plus 1pt}
+    \setlength{\headheight}{13.6pt}       
+    \makeatletter
+        \newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+        \newcommand{\pushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+        \makeatother
+    
+    \pagestyle{fancyplain}
+    \lhead{\textbf{\NAME\ (\UIN)}}
+    \chead{\textbf{HW\HWNUM}}
+    \rhead{ECE 452, Robotics: Algorithm/Control}
+    \sloppy
+    \definecolor{lightgray}{gray}{0.5}
+    \begin{document}\raggedright
+    %Section A==============Change the values below to match your information==================
+    \newcommand\NAME{Amrutha Varshini Ramesh}  % your name
+    \newcommand\UIN{663365516}     % your andrew id
+    \newcommand\HWNUM{2}              % the homework number
+    %Title and author
+    % \title{\textbf{ECE 452 - Home work 2}}
+    % \author{Amrutha Varshini Ramesh\\
+    % Net ID : arames8\\
+    % UIN : 663365516}
+    % \maketitle
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+% \documentclass{article}
+% \usepackage{graphicx}
+
+
+% \setlength{\parindent}{0pt}
+
+% \begin{document}
+
+    
+\begin{verbatim}
+function arames8_hw2()
+\end{verbatim}
+\begin{verbatim}
+%1(a) Compute v_hat for v = [5, −1, −2]T
+    v_hat =hat(5, -1, -2)
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+v_hat =
+
+     0     2    -1
+    -2     0    -5
+     1     5     0
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%1(b) Compute R = e^(v_hat)
+    R = expm(v_hat)
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+R =
+
+    0.9487   -0.3147    0.0292
+    0.2122    0.7027    0.6791
+   -0.2343   -0.6381    0.7334
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%1(c)Give the geometric interpretation (axis, angle) of R.
+    angle_R = acos((trace(R)-1)/2)
+    axis_R = (1/(2*sin(angle_R)))*[(R(3,2)-R(2,3)) ;(R(1,3)-R(3,1)) ;(R(2,1)-R(1,2))]
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+angle_R =
+
+    0.8060
+
+
+axis_R =
+
+   -0.9129
+    0.1826
+    0.3651
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%2. What vector do you get if you rotate the vector p = [5, 2, −4]T by 75 degrees around the 
+axis described by the vector ω = [4, 1, −3]T?
+    p=[5; 2; -4];
+    w =[4; 1; -3];
+    theta = 75;
+    theta_radians = deg2rad(theta);
+
+    %normalize w
+    normalized_w = norm_vector(w)
+    w1 = normalized_w(1); w2=normalized_w(2); w3=normalized_w(3);
+    
+    w_hat = hat(w1,w2,w3)
+
+    %Find rotational matrix
+     R_ppprime2 = expm(w_hat*theta_radians)
+
+     %Find the vector coordinates after rotation
+     p_prime = R_ppprime2* p
+
+%      v0 = 1-cos(theta_radians); c0 = cos(theta_radians); s0 = sin(theta_radians);
+%       R_ppprime1 = [(w1^2*v0)+ c0,    (w1*w2*v0)-(w3*s0), (w1*w3*v0)+(w2*s0);
+%                  (w1*w2*v0)+(w3*s0),(w2^2*v0)+ c0,      (w2*w3*v0)-(w1*s0);
+%                   (w1*w3*v0)-(w2*s0),(w2*w3*v0)+(w1*s0), (w3^2*v0)+ c0]
+%      R_ppprime3 = eye(3) + w_hat*sin(theta_radians)+ transpose(w_hat)*w_hat*v0
+%      p_prime = R_ppprime1* p
+%      p_prime = R_ppprime3* p
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+normalized_w =
+
+    0.7845
+    0.1961
+   -0.5883
+
+
+w_hat =
+
+         0    0.5883    0.1961
+   -0.5883         0   -0.7845
+   -0.1961    0.7845         0
+
+
+R_ppprime2 =
+
+    0.7149    0.6823   -0.1526
+   -0.4543    0.2873   -0.8433
+   -0.5315    0.6722    0.5154
+
+
+p_prime =
+
+    5.5499
+    1.6763
+   -3.3747
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+ %3a. First rotate the object for 60 degrees around the x axis of the frame A. Next, rotate 
+      the object for 45 degrees around the z axis of the rotated frame B.
+    
+      Rab = gen_rot('x',degtorad(60));
+      Rbc = gen_rot('z',degtorad(45));
+      Rb = Rbc*Rab
+  \end{verbatim}
+  
+          \color{lightgray} \begin{verbatim}
+  Rb =
+  
+      0.7071   -0.3536    0.6124
+      0.7071    0.3536   -0.6124
+           0    0.8660    0.5000
+  
+  \end{verbatim} \color{black}
+    \begin{verbatim}
+ %3b. First rotate the object for 60 degrees around the x axis of the 
+ frame A. Next, rotate the object for 45 degrees around the z axis of 
+ the frame A.
+    
+      Rac = Rab*Rbc
+    \end{verbatim}
+    
+            \color{lightgray} \begin{verbatim}
+    Rac =
+    
+        0.7071   -0.7071         0
+        0.3536    0.3536   -0.8660
+        0.6124    0.6124    0.5000
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%4b)Give the geometric interpretation (axis, angle) of the rotation described by R.
+
+R_4 =[0.4619, -0.1189, -0.8790;
+    -0.5615, -0.8063, -0.1860;
+    -0.6866, 0.5794, -0.4392];
+
+angle_R4 = acos((trace(R_4)-1)/2)
+axis_R4 = (1/(2*sin(angle_R4)))*[(R_4(3,2)-R_4(2,3)) ;(R_4(1,3)-R_4(3,1)) 
+;(R_4(2,1)-R_4(1,2))]
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+angle_R4 =
+
+    2.6721
+
+
+axis_R4 =
+
+    0.8459
+   -0.2126
+   -0.4891
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%4a)Find the exponential coordinates of R
+expo_coordinates = axis_R4*angle_R4
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+expo_coordinates =
+
+    2.2603
+   -0.5682
+   -1.3070
+
+\end{verbatim} \color{black}
+    \begin{verbatim}
+%5 A rotation matrix between frames A and B is given by: A point q is described in 
+the frame A by a vector qa = [−4, 3, 5]T. What is the description of in the frame B.
+
+qa =  [-4; 3; 5];
+Rab = [0.6325, 0.2533, -0.7319;
+      -0.7074, 0.5737, -0.4128;
+       0.3154 0.7789 0.5421];
+  qb = inv(Rab)* qa
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}
+qb =
+
+   -3.0758
+    4.6025
+    4.4000
+
+    ********************************
+\end{verbatim} \color{black}
+    \begin{verbatim}
+    function hat = hat(a1,a2,a3)
+     hat = [0, -a3, a2 ; a3, 0, -a1 ; -a2, a1, 0];
+    end
+
+    function norm_vector = norm_vector(M)
+        if norm(M) ==1
+            norm_vector =M;
+        else
+            norm_vector = normc(M);
+        end
+    end
+
+    function rot_mat = gen_rot(axis,angle)
+        if axis == 'x'
+            rot_mat = [1,0,0; 0,cos(angle),-sin(angle);0,sin(angle),cos(angle)];
+        elseif axis =='y'
+            rot_mat = [cos(angle),0,sin(angle); 0,1,0; -sin(angle),0,cos(angle)];
+        elseif axis == 'z'
+            rot_mat = [cos(angle),-sin(angle),0; sin(angle),cos(angle),0; 0,0,1];
+        end
+    end
+\end{verbatim}
+\begin{verbatim}
+end
+\end{verbatim}
+
+
+
+\end{document}
+    
